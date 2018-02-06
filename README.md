@@ -14,35 +14,14 @@ Using either of these two categories of components presents a set of compromises
 In my view, it is preferable to combine the best features of both approaches, by using a local REST API. For example, [this post](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) describes how to run a local REST API to perform object recognition using a [model](https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py) that has been trained on the [image-net](http://www.image-net.org/) library. The user runs a local Flask server, and performs image processing by posting images to the server using a simple REST API. This image processing server could be deployed as a Hassio add-on, and indeed the home-assistant developer docs give an example of deploying a simple server [here](https://home-assistant.io/developers/hassio/addon_tutorial/). I don't yet know how fast image processing can be performed on a pi as a Hassio add-on, but will soon test. For the development of this custom component, I will run the image processing server on my MAC.
 
 ## This custom component
-This custom component will simply perform the work of the example script [simple_request.py](https://github.com/jrosebr1/simple-keras-rest-api/blob/master/simple_request.py) (editied version shown below). The component wraps this script up as an image processing component that can be configured to process images captured by a configured home-assistant camera.
-```python
-simple_request.py
+This custom component will simply perform the work of the example script [simple_request.py](https://github.com/jrosebr1/simple-keras-rest-api/blob/master/simple_request.py) (edited version shown below). The component wraps this script up as an image processing component that can be configured to process images captured by a configured home-assistant camera.
 
-# import the necessary packages
-import requests
+First run your image processing server, following [the instructions to install here](https://github.com/jrosebr1/simple-keras-rest-api#) and start the server with ```python run_keras_server.py```.
 
-# initialize the Keras REST API endpoint URL along with the input
-# image path
-KERAS_REST_API_URL = "http://localhost:5000/predict"
-IMAGE_PATH = "dog.jpg"
-
-# load the input image and construct the payload for the request
-image = open(IMAGE_PATH, "rb").read()
-payload = {"image": image}
-
-# submit the request
-response = requests.post(KERAS_REST_API_URL, files=payload).json()
-
-# ensure the request was sucessful
-if response["success"]:
-	# loop over the predictions and display them
-	for (i, result) in enumerate(response["predictions"]):
-		print("{}. {}: {:.4f}".format(i + 1, result["label"],
-			result["probability"]))
-
-# otherwise, the request failed
-else:
-	print("Request failed")
-  ```
-
-  To run the image processing server, follow [the instructions to install here](https://github.com/jrosebr1/simple-keras-rest-api#) and start the server with ```python run_keras_server.py```
+Add the following to your home-assistant config:
+```yaml
+image_processing:
+  - platform: rest_api
+    url: http://localhost:5000/predict
+    file_path: /Users/robincole/.homeassistant/images/dog.jpg
+```
