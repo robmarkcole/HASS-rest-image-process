@@ -25,3 +25,7 @@ image_processing:
     url: http://localhost:5000/predict
     file_path: /Users/robincole/.homeassistant/images/dog.jpg
 ```
+
+<p align="center">
+<img src="https://github.com/robmarkcole/HASS-rest-image-process/blob/master/images/HA_view.png" width="500">
+</p>
