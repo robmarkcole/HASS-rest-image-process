@@ -16,7 +16,7 @@ In my view, it is preferable to combine the best features of both approaches, by
 ## machinebox.io
 [machinebox.io](https://machinebox.io/) are machine learning models bundled in a Docker image and exposed via a local rest API. The [Tagbox](https://machinebox.io/docs/tagbox/recognizing-images) model can be used to classify images. I am running Docker on my [Synology DS216+II](https://www.amazon.co.uk/Synology-DS218-Bay-Desktop-Enclosure/dp/B075L82DP1/ref=pd_lpo_vtph_147_bs_t_1?_encoding=UTF8&psc=1&refRID=S07X2DD6H9G1ZFV39VDE) whilst Home-assitant is running on a raspberry pi using [Hassio](https://home-assistant.io/hassio/). My camera is a simple [USB webcam](https://www.amazon.co.uk/gp/product/B000Q3VECE/ref=oh_aui_detailpage_o03_s00?ie=UTF8&psc=1).
 
-To use this component with machinebox.io, on your machine with Docker (Synology in my case), first set your credentials using `MB_KEY="you_key"`. Next run the [tagbox container](https://machinebox.io/docs/tagbox) with `docker run -p 8080:8080 -e "MB_KEY=$MB_KEY" machinebox/tagbox`.
+To use this component with machinebox.io, on your machine with Docker (Synology in my case), first set your credentials using `MB_KEY="you_key"`. Next run the [tagbox container](https://machinebox.io/docs/tagbox) with `docker run -p 8080:8080 -e "MB_KEY=$MB_KEY" machinebox/tagbox`. NOTE: I devevloped the component with machinebox on my Mac (8 GB RAM), but it appears classification times out on the Synology since I only have 1GB RAM and requirement is 3GB. It is possible to add more RAM to the Synology so that is what I will do for production.
 
 Next add the following to your Home-Assistant config (on my pi):
 ```yaml
