@@ -10,8 +10,11 @@ Using either of these two categories of components presents a set of compromises
 
 **Local with dependencies** The local components require the user to manually install an image processing package, and this may not be straightforward. For example, installing openCV on a raspberry pi can take a long time and require a level of user experience. On the other hand, all processing takes place locally so there is no dependence on an external provider or sensitivity to network performance.
 
-## Solution: a local API via Hassio add-on
+## Solution: a local API rest API
 In my view, it is preferable to combine the best features of both approaches, by using a local REST API. For example, [this post](https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html) describes how to run a local REST API to perform object recognition using a [model](https://github.com/fchollet/deep-learning-models/blob/master/resnet50.py) that has been trained on the [image-net](http://www.image-net.org/) library. The user runs a local Flask server, and performs image processing by posting images to the server using a simple REST API. This image processing server could be deployed as a Hassio add-on, and indeed the home-assistant developer docs give an example of deploying a simple server [here](https://home-assistant.io/developers/hassio/addon_tutorial/). I don't yet know how fast image processing can be performed on a pi as a Hassio add-on, but will soon test. For the development of this custom component, I will run the image processing server on my MAC.
+
+## machinebox.io
+[machinebox.io](https://machinebox.io/) are machine learning models bundled in a Docker image and exposed via a local rest API. The [Tagbox](https://machinebox.io/docs/tagbox/recognizing-images) model can be used to classify images.
 
 ## This custom component
 This custom component will simply perform the work of the example script [simple_request.py](https://github.com/jrosebr1/simple-keras-rest-api/blob/master/simple_request.py) (edited version shown below). The component wraps this script up as an image processing component that can be configured to process images captured by a configured home-assistant camera.
@@ -22,10 +25,15 @@ Add the following to your home-assistant config:
 ```yaml
 image_processing:
   - platform: rest_api
-    url: http://localhost:5000/predict
-    file_path: /Users/robincole/.homeassistant/images/dog.jpg
+    name: general_classifier
+    url: http://localhost:8080/tagbox/check
+    source:
+      - entity_id: camera.local_file
+    concepts:
+      - Dog # make case insensitive
+      - Pet
 ```
 
 <p align="center">
-<img src="https://github.com/robmarkcole/HASS-rest-image-process/blob/master/images/HA_view.png" width="500">
+<img src="https://github.com/robmarkcole/HASS-rest-image-process/blob/master/images/HA_view.png" width="700">
 </p>
