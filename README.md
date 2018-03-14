@@ -1,5 +1,5 @@
 ## Introduction
-The [image processing components](https://home-assistant.io/components/image_processing/) currently (v 0.62) available within home-assistant can be split into two categories:
+The [image processing components](https://home-assistant.io/components/image_processing/) currently (v 0.65) available within home-assistant can be split into two categories:
 
 1. Cloud: components which use a cloud service, accessed via a REST API (e.g. Microsoft, OpenALPR Cloud)
 2. Local with dependencies: components which run locally but require the user to install an extra image processing package (e.g. dblib, openCV)
@@ -16,12 +16,7 @@ In my view, it is preferable to combine the best features of both approaches, by
 ## machinebox.io
 [machinebox.io](https://machinebox.io/) are machine learning models bundled in a Docker image and exposed via a local rest API. The [Tagbox](https://machinebox.io/docs/tagbox/recognizing-images) model can be used to classify images.
 
-## This custom component
-This custom component will simply perform the work of the example script [simple_request.py](https://github.com/jrosebr1/simple-keras-rest-api/blob/master/simple_request.py) (edited version shown below). The component wraps this script up as an image processing component that can be configured to process images captured by a configured home-assistant camera.
-
-First run your image processing server, following [the instructions to install here](https://github.com/jrosebr1/simple-keras-rest-api#) and start the server with ```python run_keras_server.py```.
-
-Add the following to your home-assistant config:
+To use this component with machinebox.io, run the [tagbox container](https://machinebox.io/docs/tagbox) then add the following to your home-assistant config:
 ```yaml
 image_processing:
   - platform: rest_api
